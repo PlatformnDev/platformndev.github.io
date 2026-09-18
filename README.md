@@ -69,13 +69,45 @@ npm run prepare:model
 ### 현재 상태와 필요한 주소
 
 - 소스 저장소: https://github.com/PlatformnDev/InternalToolGui
-- 목표 주소: https://platformndev.github.io/remove_bg/ (`/remove_bg`로 접속하면 디렉터리 주소로 이동)
+- 목표 주소: https://platformndev.github.io/remove-bg/ (`/remove-bg`로 접속하면 디렉터리 주소로 이동)
 - 기존 ChatGPT Sites는 공개 접근을 차단해 소유자만 접근할 수 있습니다. 배포 기록과 프로젝트 자체는 삭제하지 않았습니다.
 - 자동 배포는 중단했습니다. `.github/workflows/pages.yml`은 수동 실행 시 정적 파일 묶음만 생성하며 사이트를 게시하지 않습니다.
 
-**저장소 이름과 기본 Pages 주소는 연결됩니다.** `InternalToolGui` 저장소에 직접 Pages를 켜면 `https://platformndev.github.io/InternalToolGui/`가 됩니다. Vite의 `base`만 `/remove_bg/`로 바꿔도 Pages 주소가 바뀌지는 않습니다.
+**저장소 이름과 기본 Pages 주소는 연결됩니다.** `InternalToolGui` 저장소에 직접 Pages를 켜면 `https://platformndev.github.io/InternalToolGui/`가 됩니다. Vite의 `base`만 `/remove-bg/`로 바꿔도 Pages 주소가 바뀌지는 않습니다.
 
-소스 저장소 이름을 유지하면서 목표 주소를 사용하려면 **조직 사이트용 `PlatformnDev/PlatformnDev.github.io` 저장소**에 정적 파일을 게시해야 합니다. 해당 저장소의 사이트 루트에 `remove_bg/` 폴더를 두는 방식입니다. 다른 방법은 프로젝트 저장소 이름을 `remove_bg`로 변경하는 것이지만, 이는 지정한 소스 저장소 주소가 바뀌므로 여기서는 사용하지 않습니다.
+### 도구 모음의 주소와 저장소 구조
+
+기본 주소는 **https://platformndev.github.io/** 입니다. 하나의 조직 사이트 아래에 도구별 폴더를 추가합니다.
+
+| 주소 | 역할 | 상태 |
+|---|---|---|
+| `/` | 도구 목록과 각 도구로 이동하는 시작 화면 | 추후 구성 |
+| `/remove-bg/` | 이미지 배경 제거 | 구현됨, 게시 중단 상태 |
+| `/generator-password/` | 비밀번호 생성 도구 | 향후 추가 예시, 미구현 |
+
+역할은 다음처럼 나눕니다.
+
+- **`PlatformnDev/InternalToolGui`**: 도구 소스와 빌드 설정을 관리합니다. 현재 배경 제거 소스는 이 저장소 루트에 있습니다. 도구가 추가되면 소스를 `tools/remove-bg/`, `tools/generator-password/` 등으로 분리할 수 있습니다.
+- **`PlatformnDev/PlatformnDev.github.io`**: 도구 모음의 정적 결과물을 게시하는 조직 사이트 저장소입니다. 이 저장소의 이름이 기본 주소 `platformndev.github.io`를 결정합니다.
+
+게시 저장소의 최종 구조는 다음과 같습니다. 비밀번호 생성 도구와 시작 화면은 구조 예시이며 현재 빌드에 포함되어 있지 않습니다.
+
+```text
+PlatformnDev.github.io/
+├── .nojekyll
+├── index.html                 # 도구 목록: /
+├── remove-bg/
+│   ├── index.html             # /remove-bg/
+│   ├── assets/
+│   ├── models/
+│   ├── ort/
+│   └── examples/
+└── generator-password/
+    ├── index.html             # /generator-password/
+    └── assets/
+```
+
+도구마다 별도의 GitHub Pages 사이트나 커스텀 도메인을 만들 필요는 없습니다. **조직 사이트 하나를 게시하고, 하위 폴더로 도구를 구분합니다.** 폴더 이름은 소문자와 하이픈으로 통일합니다. `/remove-bg`로 들어오면 GitHub Pages가 `/remove-bg/`로 이동시킵니다.
 
 확인 시점에 `InternalToolGui`의 Pages는 `production` 브랜치의 루트를 게시하도록 설정되어 있었습니다. 현재 계정에는 이 저장소의 쓰기 권한은 있으나 관리자 권한은 없으며, 조직 사이트 저장소는 조회되지 않았습니다(미생성 또는 접근 권한 없음). 조직 관리자에게 조직 사이트 저장소 생성·접근 권한과 아래 Pages 설정을 요청하세요.
 
@@ -86,7 +118,7 @@ npm run prepare:model
 ```sh
 npm ci
 npm test
-npm run build -- --base=/remove_bg/
+npm run build -- --base=/remove-bg/
 ```
 
 이 명령은 모델·WASM·이미지·Worker를 포함한 `dist/`를 생성합니다. 파일 크기는 약 199MB입니다. 런타임에는 외부 모델 CDN을 사용하지 않습니다.
@@ -94,16 +126,16 @@ npm run build -- --base=/remove_bg/
 로컬에서 같은 주소 구조로 검사하려면:
 
 ```sh
-npm run preview -- --base=/remove_bg/
+npm run preview -- --base=/remove-bg/
 ```
 
-`http://127.0.0.1:4173/remove_bg/`에서 파일 선택 → 배경 제거 → PNG 다운로드를 확인하고 `Ctrl+C`로 종료합니다.
+`http://127.0.0.1:4173/remove-bg/`에서 파일 선택 → 배경 제거 → PNG 다운로드를 확인하고 `Ctrl+C`로 종료합니다.
 
-로컬 빌드 대신 GitHub에서 **InternalToolGui → Actions → Prepare GitHub Pages files → Run workflow**를 실행해도 됩니다. 성공한 실행에서 `remove-bg-pages` 아티팩트를 내려받아 압축을 풀면 `.nojekyll`과 `remove_bg/` 폴더가 있습니다. 이 단계는 파일만 만들며 공개 배포는 하지 않습니다.
+로컬 빌드 대신 GitHub에서 **InternalToolGui → Actions → Prepare GitHub Pages files → Run workflow**를 실행해도 됩니다. 성공한 실행에서 `remove-bg-pages` 아티팩트를 내려받아 압축을 풀면 `.nojekyll`과 `remove-bg/` 폴더가 있습니다. 이 단계는 파일만 만들며 공개 배포는 하지 않습니다.
 
 ### 2. 조직 사이트 저장소에 결과 넣기
 
-조직 관리자에게 `PlatformnDev/PlatformnDev.github.io` 저장소를 준비하도록 요청합니다. 이미 조직 사이트가 있다면 그 저장소의 기존 배포 방식과 파일을 보존해야 합니다. 아래 예시는 새 저장소이거나 `main` 브랜치 루트를 정적으로 게시하는 조직 사이트 기준입니다. 기존 사이트가 GitHub Actions로 게시된다면 그 사이트의 빌드 결과에 `remove_bg/`를 병합해야 하며, 기존 Pages 설정을 덮어쓰면 안 됩니다.
+조직 관리자에게 `PlatformnDev/PlatformnDev.github.io` 저장소를 준비하도록 요청합니다. 이미 조직 사이트가 있다면 그 저장소의 기존 배포 방식과 파일을 보존해야 합니다. 아래 예시는 새 저장소이거나 `main` 브랜치 루트를 정적으로 게시하는 조직 사이트 기준입니다. 기존 사이트가 GitHub Actions로 게시된다면 그 사이트의 빌드 결과에 `remove-bg/`를 병합해야 하며, 기존 Pages 설정을 덮어쓰면 안 됩니다.
 
 로컬 소스 폴더 `InternalToolGui`와 조직 사이트 폴더가 같은 상위 폴더에 있도록 체크아웃합니다.
 
@@ -113,15 +145,15 @@ cd ..
 git clone https://github.com/PlatformnDev/PlatformnDev.github.io.git
 cd PlatformnDev.github.io
 # 이미 체크아웃한 저장소라면 clone 대신 해당 폴더에서 기존 변경 사항을 확인한 뒤 git pull
-mkdir -p remove_bg
-cp -R ../InternalToolGui/dist/. remove_bg/
+mkdir -p remove-bg
+cp -R ../InternalToolGui/dist/. remove-bg/
 touch .nojekyll
-git add remove_bg .nojekyll
+git add remove-bg .nojekyll
 git commit -m "Deploy background removal tool"
 git push origin main
 ```
 
-새 빈 저장소이고 현재 브랜치가 `main`이 아니면 최초 푸시 전에 `git branch -M main`을 실행합니다. 아티팩트를 받은 경우 `cp` 대신 압축 해제한 `remove_bg/`와 `.nojekyll`을 사이트 저장소 루트로 복사합니다. **조직 사이트 루트의 다른 파일은 삭제하지 않습니다.** 이후 재배포 시 불필요한 이전 빌드 파일은 이 도구 전용 `remove_bg/` 안에서만 정리합니다. 원본 소스나 `node_modules`는 게시하지 않습니다.
+새 빈 저장소이고 현재 브랜치가 `main`이 아니면 최초 푸시 전에 `git branch -M main`을 실행합니다. 아티팩트를 받은 경우 `cp` 대신 압축 해제한 `remove-bg/`와 `.nojekyll`을 사이트 저장소 루트로 복사합니다. **조직 사이트 루트의 다른 파일은 삭제하지 않습니다.** 이후 재배포 시 불필요한 이전 빌드 파일은 이 도구 전용 `remove-bg/` 안에서만 정리합니다. 원본 소스나 `node_modules`는 게시하지 않습니다.
 
 ### 3. 조직 사이트의 Pages 켜기
 
@@ -130,10 +162,21 @@ git push origin main
 1. **PlatformnDev.github.io → Settings → Pages**로 이동합니다.
 2. **Build and deployment → Source: Deploy from a branch**를 선택합니다.
 3. **Branch: main**, 폴더 **/(root)**를 선택하고 저장합니다.
-4. Pages 배포 작업이 성공하면 https://platformndev.github.io/remove_bg/ 에 접속합니다.
+4. Pages 배포 작업이 성공하면 https://platformndev.github.io/remove-bg/ 에 접속합니다.
 5. 로그인하지 않은 브라우저에서 예시 및 직접 선택한 이미지의 배경 제거·PNG 다운로드를 확인합니다. 첫 실행에는 모델 다운로드 시간이 필요합니다.
 
 이 절차를 적용하기 전에는 목표 주소가 동작한다고 보장할 수 없습니다. 이 문서 작성 시 목표 주소로 배포하지 않았으며, 기존 GitHub Pages 설정도 변경하지 않았습니다.
+
+### 새 도구를 추가하거나 기존 도구를 갱신할 때
+
+1. 도구별 고유 경로를 정합니다. 예를 들어 비밀번호 생성 도구는 `/generator-password/`입니다.
+2. 해당 도구를 그 경로 기준으로 빌드합니다. Vite라면 `--base=/generator-password/`를 사용합니다. JavaScript에서 직접 불러오는 파일도 이 기본 경로를 따라야 합니다.
+3. 결과물을 조직 사이트 저장소의 `generator-password/`에 넣고 루트 `index.html`의 도구 목록에 링크를 추가합니다.
+4. 조직 사이트를 게시하면 기존 `/remove-bg/`와 새 도구를 함께 사용할 수 있습니다.
+
+도구 하나를 갱신할 때는 **그 도구 폴더만 교체**하고 다른 도구와 루트 시작 화면을 보존합니다. 현재 수동 빌드가 만드는 `remove-bg-pages`는 배경 제거 도구만 들어 있는 부분 결과물입니다. 기존 조직 사이트 파일에 합쳐야 하며, 이를 조직 사이트 전체로 간주해 덮어쓰면 다른 도구가 사라집니다.
+
+나중에 GitHub Actions로 게시를 자동화할 때도 **모든 도구와 시작 화면을 모은 최종 결과물 하나**를 `deploy-pages`에 전달해야 합니다. 도구별 작업이 서로 다른 부분 결과물을 같은 조직 사이트에 각각 배포하도록 구성하지 않습니다. 현재 워크플로는 수동 파일 생성만 수행합니다.
 
 ### 운영 참고
 

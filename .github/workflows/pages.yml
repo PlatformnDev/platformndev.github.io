@@ -1,6 +1,6 @@
 name: Prepare GitHub Pages files
 # Build only. Publishing remains stopped until an administrator sets up
-# PlatformnDev.github.io and explicitly publishes the remove_bg directory.
+# PlatformnDev.github.io and explicitly publishes the remove-bg directory.
 on:
   workflow_dispatch:
 permissions:
@@ -17,11 +17,11 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Build for the organization site path
-        run: npm run build -- --base=/remove_bg/
+        run: npm run build -- --base=/remove-bg/
       - name: Assemble organization site files
         run: |
-          mkdir -p pages/remove_bg
-          cp -R dist/. pages/remove_bg/
+          mkdir -p pages/remove-bg
+          cp -R dist/. pages/remove-bg/
           touch pages/.nojekyll
       - uses: actions/upload-artifact@v4
         with:
