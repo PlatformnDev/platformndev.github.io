@@ -82,3 +82,7 @@ node tests/additional.cjs
 ## 라이선스
 
 [오픈소스 고지](public/licenses.txt)를 참고하세요. 모델 게시자의 MIT 표시와 원본 IS-Net 프로젝트의 Apache-2.0 고지를 함께 기록했습니다. AGPL인 `@imgly/background-removal` 패키지 코드는 사용하지 않습니다.
+
+## 사용 예시 사진
+
+예시 버튼은 오타니 쇼헤이의 2024년 경기 사진을 사용합니다. 촬영자 David, CC BY 2.0. 원본 출처·기존 크롭 작업자·축소 및 배경 제거 변경 사항은 `public/examples/ATTRIBUTION.md`와 화면에 표시합니다. 사진은 사이트 정적 자산에서 불러오며 외부 사진 서버에 접속하지 않습니다.

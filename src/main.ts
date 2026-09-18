@@ -36,7 +36,17 @@ async function start(file:File){
  }finally{if(token===generation)controller=undefined;}})();await pending;
 }
 function choose(files:FileList|null){if(!files?.length)return;if(files.length!==1){status.className='error';status.textContent='이미지는 한 번에 한 장씩 선택해 주세요.';return;}void start(files[0]);}
-input.addEventListener('change',()=>{choose(input.files);input.value='';});
+const sampleButton=$<HTMLButtonElement>('sample-button');
+sampleButton.addEventListener('click',async()=>{
+ const token=generation;sampleButton.disabled=true;$('sample-status').textContent='예시 사진을 불러오는 중…';
+ try{
+  const response=await fetch('/examples/shohei-ohtani.jpg');if(!response.ok)throw Error('sample');
+  const blob=await response.blob();if(token!==generation)return;
+  void start(new File([blob],'shohei-ohtani.jpg',{type:'image/jpeg'}));
+ }catch{if(token===generation)$('sample-status').textContent='예시 사진을 불러오지 못했어요. 다시 눌러 주세요.';}
+ finally{sampleButton.disabled=false;if($('sample-status').textContent==='예시 사진을 불러오는 중…')$('sample-status').textContent='';}
+});
+input.addEventListener('change' ,()=>{choose(input.files);input.value='';});
 for(const event of ['dragenter','dragover'])document.addEventListener(event,e=>{e.preventDefault();dropzone.classList.add('dragging');});
 document.addEventListener('dragleave',e=>{if(!(e as DragEvent).relatedTarget)dropzone.classList.remove('dragging');});
 document.addEventListener('drop',e=>{e.preventDefault();dropzone.classList.remove('dragging');choose(e.dataTransfer?.files??null);});

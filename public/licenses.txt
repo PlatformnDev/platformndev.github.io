@@ -6404,3 +6404,19 @@ Redistribution and use in source and binary forms, with or without modification,
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+EXAMPLE PHOTOGRAPH
+# Example photo
+
+“Shohei Ohtani (53677469590) (cropped)” — David from Washington, DC.
+Photo taken April 24, 2024, Nationals vs. Dodgers.
+
+- Photographer: https://www.flickr.com/people/65193799@N00
+- Original: https://www.flickr.com/photos/bootbearwdc/53677469590/
+- Source: https://commons.wikimedia.org/wiki/File:Shohei_Ohtani_(53677469590)_(cropped).jpg
+- License: Creative Commons Attribution 2.0 Generic (CC BY 2.0), https://creativecommons.org/licenses/by/2.0/
+- Existing crop by Wikimedia Commons user 唐貴台湾棒球好開示 (2024-05-24).
+- Clearcut changes: resized to 596 × 1200, JPEG recompression, metadata removed. Generated example output additionally removes the background.
+
+Credit David, link the source and license, and indicate changes when reusing the example or its output. No endorsement is implied.
