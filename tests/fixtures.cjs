@@ -1,0 +1,12 @@
+const sharp=require(process.env.SHARP_PATH||'sharp');
+const fs=require('fs');
+(async()=>{const root=process.cwd()+'/.cache/samples/';
+const base=await sharp(root+'astronaut.png').resize(320,320).toBuffer();
+for(const type of ['png','jpeg','webp','avif','gif'])await sharp(base).toFormat(type).toFile(root+'format.'+type);
+await sharp(base).jpeg().withMetadata({orientation:6}).toFile(root+'orientation.jpeg');
+const {data,info}=await sharp(base).ensureAlpha().raw().toBuffer({resolveWithObject:true});for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++)data[(y*info.width+x)*4+3]=x<32?0:128;await sharp(data,{raw:info}).png().toFile(root+'transparent.png');
+const rgb=await sharp(base).removeAlpha().raw().toBuffer();const w=320,h=320,stride=Math.ceil(w*3/4)*4,bmp=Buffer.alloc(54+stride*h);bmp.write('BM');bmp.writeUInt32LE(bmp.length,2);bmp.writeUInt32LE(54,10);bmp.writeUInt32LE(40,14);bmp.writeInt32LE(w,18);bmp.writeInt32LE(h,22);bmp.writeUInt16LE(1,26);bmp.writeUInt16LE(24,28);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const a=(y*w+x)*3,b=54+(h-1-y)*stride+x*3;bmp[b]=rgb[a+2];bmp[b+1]=rgb[a+1];bmp[b+2]=rgb[a];}fs.writeFileSync(root+'format.bmp',bmp);
+const red=await sharp({create:{width:32,height:32,channels:3,background:'red'}}).raw().toBuffer();const blue=await sharp({create:{width:32,height:32,channels:3,background:'blue'}}).raw().toBuffer();const joined=Buffer.concat([red,blue]);await sharp(joined,{raw:{width:32,height:64,channels:3,pageHeight:32}}).gif({delay:[50,50],loop:0}).toFile(root+'animated.gif');
+await sharp(joined,{raw:{width:32,height:64,channels:3,pageHeight:32}}).webp({delay:[50,50],loop:0,lossless:true}).toFile(root+'animated.webp');
+fs.writeFileSync(root+'broken.png',Buffer.from([137,80,78,71,13,10,26,10]));
+console.log('fixtures ready');})();
