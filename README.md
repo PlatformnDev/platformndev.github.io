@@ -84,7 +84,7 @@ src/                        # 현재 배경 제거 앱 소스
 index.html                  # 배경 제거 앱의 HTML 진입점
 public/                     # 배경 제거 모델·실행 파일·사진
 scripts/build-site.mjs       # 전체 사이트 빌드
-.github/workflows/pages.yml # 수동 GitHub Pages 배포
+.github/workflows/pages.yml # GitHub Pages 자동·수동 배포
 ```
 
 `npm run build:site`는 생성물인 `dist/`를 비운 뒤 다음 구조로 재구성합니다. `dist/`를 직접 편집하지 마세요.
@@ -109,14 +109,14 @@ dist/
 
 ### 먼저 필요한 GitHub 설정
 
-현재 로컬 `origin`은 사용자가 만든 **https://github.com/PlatformnDev/platformndev.git** 으로 변경했습니다. 이 저장소는 확인 시 비어 있었고, 현재 연결된 `youngjinmo` 계정에는 읽기 권한만 있어 원격 푸시·이름 변경·Pages 설정을 진행하지 못했습니다.
+현재 로컬 `origin`은 사용자가 만든 **https://github.com/PlatformnDev/platformndev.git** 으로 변경했습니다. 현재 `youngjinmo` 계정의 쓰기 권한과 GitHub Actions 방식의 Pages 설정은 확인했습니다. 저장소 이름이 아직 `platformndev`여서 현재 설정된 Pages 주소는 `/platformndev/`입니다. 저장소 이름 변경에는 관리자 권한이 필요합니다.
 
 **목표 주소를 쓰려면 저장소 이름을 `platformndev.github.io`로 변경해야 합니다.** `platformndev`라는 이름으로 프로젝트 Pages를 게시하면 기본 주소가 `https://platformndev.github.io/platformndev/`가 됩니다. 코드의 기본 경로나 CNAME 파일로 GitHub 소유 도메인의 경로를 바꿀 수는 없습니다.
 
 조직 또는 저장소 관리자가 다음을 진행합니다.
 
 1. 새 저장소 **Settings → General → Repository name**을 `platformndev.github.io`로 변경합니다. 해당 이름의 조직 사이트 저장소가 이미 있다면 기존 사이트를 먼저 확인하고 결과물을 통합해야 합니다.
-2. 이 저장소에 코드를 올릴 사용자(현재 CLI 계정은 `youngjinmo`)에게 **Write** 권한을 부여하거나, 쓰기 권한이 있는 계정으로 직접 푸시합니다.
+2. 코드를 올릴 사용자의 **Write** 권한을 확인합니다. 현재 CLI 계정 `youngjinmo`는 쓰기 권한이 있습니다.
 3. **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**로 설정합니다. 브랜치 게시 방식과 혼용하지 않습니다.
 4. 조직 정책에서 Actions 실행 및 GitHub Pages 배포가 허용되어 있는지 확인합니다.
 
@@ -127,7 +127,7 @@ git remote set-url origin https://github.com/PlatformnDev/platformndev.github.io
 git remote -v
 ```
 
-### 소스 올리기와 수동 배포
+### 소스 올리기와 배포
 
 로컬 변경을 커밋한 뒤 새 저장소의 `main`으로 푸시합니다. 새 저장소가 비어 있을 때 일반 푸시를 사용하며, 다른 커밋이 생겼다면 먼저 변경 내용을 통합합니다. 강제 푸시는 하지 않습니다.
 
@@ -138,15 +138,15 @@ npm run build:site
 git push -u origin main
 ```
 
-그다음 GitHub에서 **Actions → Deploy organization tools → Run workflow → main**을 선택합니다.
+이름 변경 후 `main`에 푸시하면 자동 배포합니다. 변경할 코드 없이 다시 배포하려면 GitHub에서 **Actions → Deploy organization tools → Run workflow → main**을 선택합니다.
 
-워크플로는 저장소 이름 확인 → 테스트 → 전체 사이트 빌드 → GitHub Pages 배포 순서로 실행됩니다. 이름이 `platformndev.github.io`가 아니면 잘못된 주소로 게시하지 않도록 중단합니다. 저장소 기본 토큰을 사용하므로 소스 코드에 인증 토큰을 추가하지 않습니다. `github-pages` 환경에 승인 규칙이 있다면 지정된 검토자가 승인해야 합니다.
+워크플로는 테스트 → 전체 사이트 빌드 → 정적 파일 저장 → GitHub Pages 배포 순서로 실행됩니다. 저장소가 `PlatformnDev/platformndev.github.io`가 아니면 빌드까지만 수행하고 배포 작업은 건너뜁니다. 잘못된 주소에 게시하지 않기 위한 조건입니다. 저장소 기본 토큰을 사용하므로 소스 코드에 인증 토큰을 추가하지 않습니다. `github-pages` 환경에 승인 규칙이 있다면 지정된 검토자가 승인해야 합니다.
 
 - 워크플로 성공 후 https://platformndev.github.io/ 에서 도구 목록을 확인합니다.
 - 배경 제거 카드로 이동하거나 https://platformndev.github.io/remove-bg/ 에 직접 접속합니다.
 - 로그인하지 않은 브라우저에서 예시 및 직접 선택한 이미지의 처리·PNG 다운로드를 확인합니다. 첫 실행에는 약 199MB의 모델·실행 자산을 내려받아 시간이 걸릴 수 있습니다.
 
-**푸시만으로 자동 배포하지 않습니다.** 현재 워크플로는 `workflow_dispatch` 수동 실행만 지원하며 기존 배포 중단 의도를 유지합니다. 이 문서 작성 시 원격 배포는 완료하지 않았습니다. 기존 ChatGPT Sites도 공개 접근 차단 상태이며 다시 배포하지 않습니다.
+**올바른 저장소 이름에서는 `main` 푸시 시 자동 배포합니다.** 수동 실행도 지원합니다. 이 문서 작성 시 목표 주소의 원격 배포는 아직 완료하지 않았습니다. 기존 ChatGPT Sites는 공개 접근 차단 상태이며 다시 배포하지 않습니다.
 
 ### 새로운 도구 추가
 
