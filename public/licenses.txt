@@ -1,5 +1,11 @@
 Clearcut — third-party notices
 
+Light model: xrds/isnet-general-onnx-int8 / onnx/model_quantized.onnx
+Revision: 71eff2372ec9c8edbc6ca637ded591423d23b65a
+SHA-256: 3b21a6706dc8d6e4ba9f5b31ebc6940f6c785b58862e27bb25daa9dd4424b87f
+Source: https://huggingface.co/xrds/isnet-general-onnx-int8
+The publisher declares the model MIT licensed in its model card.
+
 Model: imgly/isnet-general-onnx / onnx/model.onnx
 Revision: 440dea96dd4a3b06bbbf5abec3e26569dd7ec49f
 SHA-256: cc2c9f5c1751b9737cb81e708ff0c5e9542c2205daed22418a4fd2ab5d4c481a
@@ -9,6 +15,7 @@ Underlying IS-Net project: https://github.com/xuebinqin/DIS (Apache-2.0).
 This application uses the ONNX weights directly, not the AGPL background-removal-js package.
 
 MIT License
+Copyright (c) imgly GmbH
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights

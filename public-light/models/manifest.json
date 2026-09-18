@@ -1,0 +1,43 @@
+{
+  "model": "xrds/isnet-general-onnx-int8",
+  "revision": "71eff2372ec9c8edbc6ca637ded591423d23b65a",
+  "url": "https://huggingface.co/xrds/isnet-general-onnx-int8/resolve/71eff2372ec9c8edbc6ca637ded591423d23b65a/onnx/model_quantized.onnx",
+  "license": "MIT",
+  "sha256": "3b21a6706dc8d6e4ba9f5b31ebc6940f6c785b58862e27bb25daa9dd4424b87f",
+  "bytes": 44229662,
+  "inputSize": 1024,
+  "mean": 128,
+  "std": 256,
+  "chunks": [
+    {
+      "file": "chunk-000.bin",
+      "bytes": 8388608,
+      "sha256": "ef2de0cf10b757662ca9497cd4d9f0f369de0afa08ce97e16225f09b9a477f7e"
+    },
+    {
+      "file": "chunk-001.bin",
+      "bytes": 8388608,
+      "sha256": "effa61bbb12dfb57d4e0a6d32eb1f10e3ea65a68ecbf184926b1216208fbd84e"
+    },
+    {
+      "file": "chunk-002.bin",
+      "bytes": 8388608,
+      "sha256": "74f6abb01cc7456f8a4c7d8166c7d67623e86e4ab61fac3644c9ed144361bffd"
+    },
+    {
+      "file": "chunk-003.bin",
+      "bytes": 8388608,
+      "sha256": "030fa0eed9201bc3dbe6d681f7576d6649047514eac5b11ab23e0c77fa927b26"
+    },
+    {
+      "file": "chunk-004.bin",
+      "bytes": 8388608,
+      "sha256": "f14d30f3d911e3f759e88b6503d364362e15076819243fe43992f50354d1895d"
+    },
+    {
+      "file": "chunk-005.bin",
+      "bytes": 2286622,
+      "sha256": "8a9bfc9e6adc9bfd35ca9d0f6b8f49c2d24aec0741b707c2d971a5748df44454"
+    }
+  ]
+}

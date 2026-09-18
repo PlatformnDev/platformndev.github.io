@@ -5,6 +5,10 @@ const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const input=$<HTMLInputElement>('file'),dropzone=$('dropzone'),editor=$('editor'),status=$('status'),actions=$('actions');
 let controller:AbortController|undefined,pending:Promise<void>|undefined,selected:File|undefined,result:Result|undefined;
 let generation=0,previewURL:string|undefined,resultURL:string|undefined,state='idle';
+function getLoadingMessage(){
+ if(import.meta.env.VITE_SITE_VARIANT==='light')return '모델 준비 중… 처음 사용할 때 Light 모델 약 44MB와 실행 리소스를 내려받아 최대 약 65MB가 필요할 수 있어요.';
+ return '모델 준비 중… 처음 사용할 때 모델 약 176MB와 실행 리소스를 내려받아 최대 약 200MB가 필요할 수 있어요.';
+}
 const clearUrls=()=>{if(previewURL)URL.revokeObjectURL(previewURL);if(resultURL)URL.revokeObjectURL(resultURL);previewURL=resultURL=undefined;};
 const button=(text:string,fn:()=>void,secondary=false)=>{const b=document.createElement('button');b.textContent=text;if(secondary)b.className='secondary';b.onclick=fn;actions.append(b);return b;};
 function cancel(){generation++;controller?.abort();controller=undefined;state='cancelled';status.className='';status.textContent='작업을 취소했습니다. 다시 시도하거나 다른 이미지를 선택해 주세요.';actions.replaceChildren();if(selected)button('다시 시도',()=>void start(selected!));button('다른 이미지 선택',()=>input.click(),true);const waiting=editor.querySelector('.waiting');if(waiting)waiting.textContent='작업이 취소되었습니다.';}
@@ -19,7 +23,7 @@ function updateUI(update:Update){
  if(update.preview)renderPreview(update);state=update.stage;status.className='';status.replaceChildren();
  if(update.stage==='validating')status.textContent='파일 확인 중…';
  if(update.stage==='loading'){
- status.textContent='모델 준비 중… 처음 사용할 때 약 176MB의 모델을 내려받아 시간이 걸릴 수 있어요.';
+ status.textContent=getLoadingMessage();
  if(update.total!==undefined){const p=document.createElement('progress');p.max=update.total;p.value=update.done??0;p.setAttribute('aria-label','처리 도구 준비');status.append(p);const s=document.createElement('span');s.textContent=` ${Math.round((update.done??0)/update.total*100)}%`;status.append(s);}
  }
  if(update.stage==='processing'){status.textContent='배경 제거 중… 브라우저와 이미지에 따라 시간이 걸릴 수 있어요.';const w=editor.querySelector('.waiting');if(w)w.innerHTML='<span class="spinner" aria-hidden="true"></span>배경을 제거하고 있어요';}
