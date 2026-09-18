@@ -1,1 +1,98 @@
-<!doctype html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="이미지를 서버에 보내지 않는 브라우저 배경 제거 도구"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="%BASE_URL%favicon.svg"><title>Clearcut — 이미지 배경 제거</title></head><body><div id="app"><header><a class="brand" href="%BASE_URL%">Clearcut<span class="brand-dot">.</span></a><span class="header-note">이미지 배경 제거</span></header><main><div class="intro"><span class="eyebrow">당신의 이미지, 필요한 부분만.</span><h1>배경은 지우고, <br>피사체는 또렷하게.</h1><p>이미지를 놓으면 배경을 투명하게 만들어 드려요.</p></div><section id="workspace" aria-label="이미지 배경 제거"><label class="dropzone" id="dropzone" for="file"><span class="upload-icon" aria-hidden="true">↥</span><strong>이미지를 여기에 놓아주세요</strong><span>또는 파일을 선택해서 시작하세요</span><span class="button">이미지 선택</span><small>JPG · PNG · WebP · AVIF · BMP · GIF<br>최대 20MB · 한 번에 한 장</small><input id="file" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,.bmp,.gif" aria-label="이미지 선택"></label><div id="editor" hidden></div><p id="status" role="status" aria-live="polite"></p><div id="actions"></div></section><aside class="sample" aria-label="사용 예시"><button id="sample-button" class="sample-button" type="button"><img src="%BASE_URL%examples/shohei-ohtani.jpg" alt="" width="44" height="60"><span><strong>사진이 없다면, 예시로 체험해 보세요</strong><small>오타니 쇼헤이 · 배경 제거해 보기 →</small></span></button><p class="sample-credit">사진: <a href="https://www.flickr.com/people/65193799@N00" target="_blank" rel="noopener noreferrer">David</a> · <a href="https://commons.wikimedia.org/wiki/File:Shohei_Ohtani_(53677469590)_(cropped).jpg" target="_blank" rel="noopener noreferrer">출처</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a><br>크롭본을 축소했습니다. 예시 결과에는 배경 제거가 적용되며, 재사용할 때도 출처를 표시해 주세요.</p><p id="sample-status" role="status" aria-live="polite"></p></aside><p class="privacy"><span aria-hidden="true">◇</span> 이미지는 서버로 전송되지 않고 이 브라우저에서 처리됩니다.</p><aside class="details"><div><span>01</span><strong>이미지 선택</strong><p>평소 사용하는 이미지 그대로</p></div><div><span>02</span><strong>자동 배경 제거</strong><p>설정 없이, 브라우저 안에서</p></div><div><span>03</span><strong>투명 PNG 저장</strong><p>원본 크기를 유지한 결과물</p></div></aside></main><footer><span>Clearcut</span><span>가볍게 시작하고, 깔끔하게 마무리하세요.</span><a href="%BASE_URL%licenses.txt">오픈소스 안내</a></footer></div><script type="module" src="/src/main.ts"></script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="이미지를 서버에 보내지 않는 브라우저 배경 제거 도구">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="%BASE_URL%brand/platformn-icon.png">
+<title>Platform N — 이미지 배경 제거</title>
+</head>
+<body>
+<div id="app">
+<header class="site-header">
+<div class="header-inner">
+<a class="brand" href="/" aria-label="Platform N 도구 모음 홈">
+<img src="%BASE_URL%brand/platformn-logo.png" alt="Platform N" width="512" height="75">
+</a>
+<a class="header-note" href="/">도구 모음 <span aria-hidden="true">↗</span>
+</a>
+</div>
+</header>
+<main>
+<div class="intro">
+<span class="eyebrow">이미지 배경 제거</span>
+<h1>배경은 지우고, <br>피사체는 또렷하게.</h1>
+<p>이미지를 놓으면 배경을 투명하게 만들어 드려요.</p>
+</div>
+<section id="workspace" aria-label="이미지 배경 제거">
+<label class="dropzone" id="dropzone" for="file">
+<span class="upload-icon" aria-hidden="true">↥</span>
+<strong>이미지를 여기에 놓아주세요</strong>
+<span>또는 파일을 선택해서 시작하세요</span>
+<span class="button">이미지 선택</span>
+<small>JPG · PNG · WebP · AVIF · BMP · GIF<br>최대 20MB · 한 번에 한 장</small>
+<input id="file" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,.bmp,.gif" aria-label="이미지 선택">
+</label>
+<div id="editor" hidden></div>
+<p id="status" role="status" aria-live="polite"></p>
+<div id="actions"></div>
+</section>
+<aside class="sample" aria-label="사용 예시">
+<button id="sample-button" class="sample-button" type="button">
+<img src="%BASE_URL%examples/shohei-ohtani.jpg" alt="" width="44" height="60">
+<span>
+<strong>사진이 없다면, 예시로 체험해 보세요</strong>
+<small>오타니 쇼헤이 · 배경 제거해 보기 →</small>
+</span>
+</button>
+<p class="sample-credit">사진: <a href="https://www.flickr.com/people/65193799@N00" target="_blank" rel="noopener noreferrer">David</a> · <a href="https://commons.wikimedia.org/wiki/File:Shohei_Ohtani_(53677469590)_(cropped).jpg" target="_blank" rel="noopener noreferrer">출처</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>
+<br>크롭본을 축소했습니다. 예시 결과에는 배경 제거가 적용되며, 재사용할 때도 출처를 표시해 주세요.</p>
+<p id="sample-status" role="status" aria-live="polite"></p>
+</aside>
+<p class="privacy">
+<span aria-hidden="true">◇</span> 이미지는 서버로 전송되지 않고 이 브라우저에서 처리됩니다.</p>
+<aside class="details">
+<div>
+<span>01</span>
+<strong>이미지 선택</strong>
+<p>평소 사용하는 이미지 그대로</p>
+</div>
+<div>
+<span>02</span>
+<strong>자동 배경 제거</strong>
+<p>설정 없이, 브라우저 안에서</p>
+</div>
+<div>
+<span>03</span>
+<strong>투명 PNG 저장</strong>
+<p>원본 크기를 유지한 결과물</p>
+</div>
+</aside>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<div class="footer-top">
+<div class="footer-brand">
+<img src="%BASE_URL%brand/platformn-logo.png" alt="Platform N" width="512" height="75">
+<p>일하는 흐름을 더 편리하게 만듭니다.</p>
+</div>
+<nav class="footer-links" aria-label="회사 및 서비스 관련 링크">
+<a href="https://platformn.kr/" target="_blank" rel="noopener noreferrer">회사 홈페이지 <span aria-hidden="true">↗</span>
+<span class="sr-only"> (새 탭)</span>
+</a>
+<a href="https://platformn.career.greetinghr.com/ko/recruit" target="_blank" rel="noopener noreferrer">채용 안내 <span aria-hidden="true">↗</span>
+<span class="sr-only"> (새 탭)</span>
+</a>
+<a href="%BASE_URL%licenses.txt">오픈소스 안내</a>
+</nav>
+</div>
+<p class="copyright">© Platform N. All rights reserved.</p>
+</div>
+</footer>
+</div>
+<script type="module" src="/src/main.ts">
+</script>
+</body>
+</html>
