@@ -1,32 +1,34 @@
-# Clearcut
+# Platformn 도구 모음
 
-브라우저에서 이미지 배경을 제거하는 정적 사이트입니다. 이미지를 서버에 보내지 않습니다. Vite + TypeScript + ONNX Runtime Web으로 구성했으며 로그인, API 서버, 데이터베이스가 없습니다.
+조직 사이트의 도구 목록과 브라우저 기반 이미지 배경 제거 기능을 제공하는 정적 사이트입니다. 이미지를 서버에 보내지 않습니다. Vite + TypeScript + ONNX Runtime Web으로 구성했으며 로그인, API 서버, 데이터베이스가 없습니다.
 
 ## 로컬에서 실행하기
 
 Node.js 22.23 이상과 Git을 설치합니다. Node 설치에 포함된 npm을 사용합니다.
 
 ```sh
-git clone https://github.com/PlatformnDev/InternalToolGui.git
-cd InternalToolGui
+git clone https://github.com/PlatformnDev/platformndev.git
+cd platformndev
 npm ci
 npm run dev
 ```
 
 터미널에 표시되는 주소(기본 `http://127.0.0.1:5173/`)를 브라우저에서 엽니다. 이미지를 선택하거나 오타니 예시 버튼을 누르면 자동으로 배경을 제거합니다. 완료 후 **투명 PNG 다운로드**로 저장합니다. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다.
 
+위 clone 주소는 현재 저장소 이름 기준입니다. 저장소 이름을 `platformndev.github.io`로 변경한 뒤에는 clone 주소와 `cd` 폴더명도 그 이름을 사용하세요.
+
 이미 이 작업 폴더에 있다면 `git clone`과 `cd`를 생략하고 `npm ci`부터 실행합니다. 포트가 사용 중이면 터미널에 표시된 다른 포트를 사용하세요. Chrome·Edge 계열 데스크톱 브라우저를 권장하며 실제 검증 범위는 아래 검증 기록을 참고하세요.
 
 모델 조각과 실행 파일은 `public/`에 포함되어 있어 정상 체크아웃 후 별도 모델 다운로드 없이 실행할 수 있습니다. 브라우저가 처음 실행할 때 로컬 서버에서 모델 약 176MB와 실행 자산 약 22MB를 읽습니다. 이미지 처리는 브라우저 안에서 수행합니다. 파일이 누락되었다면 `npm run prepare:model`로 복구할 수 있으며, 이 준비 명령은 인터넷에 접속합니다.
 
-배포용 빌드를 로컬에서 확인하려면:
+도구 목록과 `/remove-bg/`를 포함한 전체 사이트를 로컬에서 확인하려면:
 
 ```sh
-npm run build
-npm run preview
+npm run build:site
+npm run preview:site
 ```
 
-기본 주소는 `http://127.0.0.1:4173/`이며 종료는 `Ctrl+C`입니다. 테스트는 `npm test`로 실행합니다. `dist/`가 완전 정적 결과물입니다. `index.html`을 파일 탐색기에서 직접 열면 Worker·모델 로딩이 동작하지 않으므로 반드시 로컬 서버 또는 HTTPS 호스팅을 사용하세요.
+도구 목록은 `http://127.0.0.1:4173/`, 배경 제거는 `http://127.0.0.1:4173/remove-bg/`입니다. 종료는 `Ctrl+C`입니다. 테스트는 `npm test`로 실행합니다. `dist/`가 완전 정적 결과물입니다. `index.html`을 파일 탐색기에서 직접 열면 Worker·모델 로딩이 동작하지 않으므로 반드시 로컬 서버 또는 HTTPS 호스팅을 사용하세요.
 
 ## 입력과 출력
 
@@ -64,127 +66,105 @@ npm run prepare:model
 
 모델과 런타임은 동일 사이트에서 제공합니다. GitHub Pages에서는 `_headers` 파일이 적용되지 않으므로 빌드 HTML의 CSP 및 referrer 메타 태그를 사용합니다. 헤더로만 가능한 frame-ancestors와 nosniff, 사용자 지정 HTTP 캐시 정책은 Pages에서 설정하지 못합니다. 모델의 Cache Storage 재사용은 계속 동작합니다. 캐시가 차단되거나 저장 공간이 부족해도 해당 세션에서 처리가 가능합니다.
 
-## GitHub Pages 호스팅 방법
+## 주소와 소스 구조
 
-### 현재 상태와 필요한 주소
-
-- 소스 저장소: https://github.com/PlatformnDev/InternalToolGui
-- 목표 주소: https://platformndev.github.io/remove-bg/ (`/remove-bg`로 접속하면 디렉터리 주소로 이동)
-- 기존 ChatGPT Sites는 공개 접근을 차단해 소유자만 접근할 수 있습니다. 배포 기록과 프로젝트 자체는 삭제하지 않았습니다.
-- 자동 배포는 중단했습니다. `.github/workflows/pages.yml`은 수동 실행 시 정적 파일 묶음만 생성하며 사이트를 게시하지 않습니다.
-
-**저장소 이름과 기본 Pages 주소는 연결됩니다.** `InternalToolGui` 저장소에 직접 Pages를 켜면 `https://platformndev.github.io/InternalToolGui/`가 됩니다. Vite의 `base`만 `/remove-bg/`로 바꿔도 Pages 주소가 바뀌지는 않습니다.
-
-### 도구 모음의 주소와 저장소 구조
-
-기본 주소는 **https://platformndev.github.io/** 입니다. 하나의 조직 사이트 아래에 도구별 폴더를 추가합니다.
-
-| 주소 | 역할 | 상태 |
+| 경로 | 역할 | 구현 상태 |
 |---|---|---|
-| `/` | 도구 목록과 각 도구로 이동하는 시작 화면 | 추후 구성 |
-| `/remove-bg/` | 이미지 배경 제거 | 구현됨, 게시 중단 상태 |
-| `/generator-password/` | 비밀번호 생성 도구 | 향후 추가 예시, 미구현 |
+| `https://platformndev.github.io/` | 도구 목록 | 구현됨 |
+| `https://platformndev.github.io/remove-bg/` | 이미지 배경 제거 | 구현됨 |
+| `https://platformndev.github.io/generator-password/` | 향후 비밀번호 생성 도구 | 아직 미구현 |
 
-역할은 다음처럼 나눕니다.
-
-- **`PlatformnDev/InternalToolGui`**: 도구 소스와 빌드 설정을 관리합니다. 현재 배경 제거 소스는 이 저장소 루트에 있습니다. 도구가 추가되면 소스를 `tools/remove-bg/`, `tools/generator-password/` 등으로 분리할 수 있습니다.
-- **`PlatformnDev/PlatformnDev.github.io`**: 도구 모음의 정적 결과물을 게시하는 조직 사이트 저장소입니다. 이 저장소의 이름이 기본 주소 `platformndev.github.io`를 결정합니다.
-
-게시 저장소의 최종 구조는 다음과 같습니다. 비밀번호 생성 도구와 시작 화면은 구조 예시이며 현재 빌드에 포함되어 있지 않습니다.
+소스와 배포 설정을 이 저장소 하나에서 관리합니다. 이전 `InternalToolGui` 저장소는 새 배포에 사용하지 않습니다.
 
 ```text
-PlatformnDev.github.io/
-├── .nojekyll
-├── index.html                 # 도구 목록: /
-├── remove-bg/
-│   ├── index.html             # /remove-bg/
-│   ├── assets/
-│   ├── models/
-│   ├── ort/
-│   └── examples/
-└── generator-password/
-    ├── index.html             # /generator-password/
-    └── assets/
+site/                       # 조직 사이트의 도구 목록과 정적 파일
+  index.html
+  portal.css
+src/                        # 현재 배경 제거 앱 소스
+index.html                  # 배경 제거 앱의 HTML 진입점
+public/                     # 배경 제거 모델·실행 파일·사진
+scripts/build-site.mjs       # 전체 사이트 빌드
+.github/workflows/pages.yml # 수동 GitHub Pages 배포
 ```
 
-도구마다 별도의 GitHub Pages 사이트나 커스텀 도메인을 만들 필요는 없습니다. **조직 사이트 하나를 게시하고, 하위 폴더로 도구를 구분합니다.** 폴더 이름은 소문자와 하이픈으로 통일합니다. `/remove-bg`로 들어오면 GitHub Pages가 `/remove-bg/`로 이동시킵니다.
+`npm run build:site`는 생성물인 `dist/`를 비운 뒤 다음 구조로 재구성합니다. `dist/`를 직접 편집하지 마세요.
 
-확인 시점에 `InternalToolGui`의 Pages는 `production` 브랜치의 루트를 게시하도록 설정되어 있었습니다. 현재 계정에는 이 저장소의 쓰기 권한은 있으나 관리자 권한은 없으며, 조직 사이트 저장소는 조회되지 않았습니다(미생성 또는 접근 권한 없음). 조직 관리자에게 조직 사이트 저장소 생성·접근 권한과 아래 Pages 설정을 요청하세요.
+```text
+dist/
+├── .nojekyll
+├── index.html              # /
+├── portal.css
+└── remove-bg/
+    ├── index.html          # /remove-bg/
+    ├── assets/
+    ├── models/
+    ├── ort/
+    ├── examples/
+    └── licenses.txt
+```
 
-### 1. 게시할 정적 파일 만들기
+배경 제거 앱은 `/remove-bg/` 기준으로 빌드하므로 사진·모델·WASM·Worker·라이선스 링크가 모두 이 경로를 사용합니다. `/remove-bg`로 들어오면 GitHub Pages가 `/remove-bg/`로 이동시킵니다. 기존 `npm run build`와 `npm run preview`는 배경 제거 앱 단독 빌드·미리보기용이며, 조직 사이트를 게시할 때는 반드시 `build:site`를 사용합니다.
 
-로컬 소스 저장소에서 실행합니다(macOS/Linux 셸 기준).
+## GitHub Pages 호스팅 방법
+
+### 먼저 필요한 GitHub 설정
+
+현재 로컬 `origin`은 사용자가 만든 **https://github.com/PlatformnDev/platformndev.git** 으로 변경했습니다. 이 저장소는 확인 시 비어 있었고, 현재 연결된 `youngjinmo` 계정에는 읽기 권한만 있어 원격 푸시·이름 변경·Pages 설정을 진행하지 못했습니다.
+
+**목표 주소를 쓰려면 저장소 이름을 `platformndev.github.io`로 변경해야 합니다.** `platformndev`라는 이름으로 프로젝트 Pages를 게시하면 기본 주소가 `https://platformndev.github.io/platformndev/`가 됩니다. 코드의 기본 경로나 CNAME 파일로 GitHub 소유 도메인의 경로를 바꿀 수는 없습니다.
+
+조직 또는 저장소 관리자가 다음을 진행합니다.
+
+1. 새 저장소 **Settings → General → Repository name**을 `platformndev.github.io`로 변경합니다. 해당 이름의 조직 사이트 저장소가 이미 있다면 기존 사이트를 먼저 확인하고 결과물을 통합해야 합니다.
+2. 이 저장소에 코드를 올릴 사용자(현재 CLI 계정은 `youngjinmo`)에게 **Write** 권한을 부여하거나, 쓰기 권한이 있는 계정으로 직접 푸시합니다.
+3. **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**로 설정합니다. 브랜치 게시 방식과 혼용하지 않습니다.
+4. 조직 정책에서 Actions 실행 및 GitHub Pages 배포가 허용되어 있는지 확인합니다.
+
+이름 변경 후 로컬에서 원격 주소를 갱신합니다.
+
+```sh
+git remote set-url origin https://github.com/PlatformnDev/platformndev.github.io.git
+git remote -v
+```
+
+### 소스 올리기와 수동 배포
+
+로컬 변경을 커밋한 뒤 새 저장소의 `main`으로 푸시합니다. 새 저장소가 비어 있을 때 일반 푸시를 사용하며, 다른 커밋이 생겼다면 먼저 변경 내용을 통합합니다. 강제 푸시는 하지 않습니다.
 
 ```sh
 npm ci
 npm test
-npm run build -- --base=/remove-bg/
+npm run build:site
+git push -u origin main
 ```
 
-이 명령은 모델·WASM·이미지·Worker를 포함한 `dist/`를 생성합니다. 파일 크기는 약 199MB입니다. 런타임에는 외부 모델 CDN을 사용하지 않습니다.
+그다음 GitHub에서 **Actions → Deploy organization tools → Run workflow → main**을 선택합니다.
 
-로컬에서 같은 주소 구조로 검사하려면:
+워크플로는 저장소 이름 확인 → 테스트 → 전체 사이트 빌드 → GitHub Pages 배포 순서로 실행됩니다. 이름이 `platformndev.github.io`가 아니면 잘못된 주소로 게시하지 않도록 중단합니다. 저장소 기본 토큰을 사용하므로 소스 코드에 인증 토큰을 추가하지 않습니다. `github-pages` 환경에 승인 규칙이 있다면 지정된 검토자가 승인해야 합니다.
 
-```sh
-npm run preview -- --base=/remove-bg/
-```
+- 워크플로 성공 후 https://platformndev.github.io/ 에서 도구 목록을 확인합니다.
+- 배경 제거 카드로 이동하거나 https://platformndev.github.io/remove-bg/ 에 직접 접속합니다.
+- 로그인하지 않은 브라우저에서 예시 및 직접 선택한 이미지의 처리·PNG 다운로드를 확인합니다. 첫 실행에는 약 199MB의 모델·실행 자산을 내려받아 시간이 걸릴 수 있습니다.
 
-`http://127.0.0.1:4173/remove-bg/`에서 파일 선택 → 배경 제거 → PNG 다운로드를 확인하고 `Ctrl+C`로 종료합니다.
+**푸시만으로 자동 배포하지 않습니다.** 현재 워크플로는 `workflow_dispatch` 수동 실행만 지원하며 기존 배포 중단 의도를 유지합니다. 이 문서 작성 시 원격 배포는 완료하지 않았습니다. 기존 ChatGPT Sites도 공개 접근 차단 상태이며 다시 배포하지 않습니다.
 
-로컬 빌드 대신 GitHub에서 **InternalToolGui → Actions → Prepare GitHub Pages files → Run workflow**를 실행해도 됩니다. 성공한 실행에서 `remove-bg-pages` 아티팩트를 내려받아 압축을 풀면 `.nojekyll`과 `remove-bg/` 폴더가 있습니다. 이 단계는 파일만 만들며 공개 배포는 하지 않습니다.
+### 새로운 도구 추가
 
-### 2. 조직 사이트 저장소에 결과 넣기
+1. 새 경로를 소문자·하이픈 형태로 정합니다. 예: `/generator-password/`.
+2. 빌드가 필요 없는 도구는 `site/generator-password/`에 넣습니다. 전체 사이트 빌드가 이 폴더를 `dist/generator-password/`로 복사합니다.
+3. 별도 빌드가 필요한 도구는 소스를 `tools/generator-password/` 등에 두고 `scripts/build-site.mjs`에 해당 빌드 단계를 추가합니다. 출력은 `dist/generator-password/`, 자산 기본 경로는 `/generator-password/`로 지정합니다. 배경 제거에 필요한 `src/`는 기존 위치에 둡니다.
+4. `site/index.html`에 새 도구 링크를 추가합니다. 구현되지 않은 도구를 사용 가능한 링크로 표시하지 않습니다.
+5. `npm run build:site`와 `npm run preview:site`로 모든 도구를 검증한 다음 전체 사이트를 한 번에 게시합니다.
 
-조직 관리자에게 `PlatformnDev/PlatformnDev.github.io` 저장소를 준비하도록 요청합니다. 이미 조직 사이트가 있다면 그 저장소의 기존 배포 방식과 파일을 보존해야 합니다. 아래 예시는 새 저장소이거나 `main` 브랜치 루트를 정적으로 게시하는 조직 사이트 기준입니다. 기존 사이트가 GitHub Actions로 게시된다면 그 사이트의 빌드 결과에 `remove-bg/`를 병합해야 하며, 기존 Pages 설정을 덮어쓰면 안 됩니다.
-
-로컬 소스 폴더 `InternalToolGui`와 조직 사이트 폴더가 같은 상위 폴더에 있도록 체크아웃합니다.
-
-```sh
-# InternalToolGui 폴더에서 실행
-cd ..
-git clone https://github.com/PlatformnDev/PlatformnDev.github.io.git
-cd PlatformnDev.github.io
-# 이미 체크아웃한 저장소라면 clone 대신 해당 폴더에서 기존 변경 사항을 확인한 뒤 git pull
-mkdir -p remove-bg
-cp -R ../InternalToolGui/dist/. remove-bg/
-touch .nojekyll
-git add remove-bg .nojekyll
-git commit -m "Deploy background removal tool"
-git push origin main
-```
-
-새 빈 저장소이고 현재 브랜치가 `main`이 아니면 최초 푸시 전에 `git branch -M main`을 실행합니다. 아티팩트를 받은 경우 `cp` 대신 압축 해제한 `remove-bg/`와 `.nojekyll`을 사이트 저장소 루트로 복사합니다. **조직 사이트 루트의 다른 파일은 삭제하지 않습니다.** 이후 재배포 시 불필요한 이전 빌드 파일은 이 도구 전용 `remove-bg/` 안에서만 정리합니다. 원본 소스나 `node_modules`는 게시하지 않습니다.
-
-### 3. 조직 사이트의 Pages 켜기
-
-조직 사이트 저장소의 관리자가 다음을 설정합니다.
-
-1. **PlatformnDev.github.io → Settings → Pages**로 이동합니다.
-2. **Build and deployment → Source: Deploy from a branch**를 선택합니다.
-3. **Branch: main**, 폴더 **/(root)**를 선택하고 저장합니다.
-4. Pages 배포 작업이 성공하면 https://platformndev.github.io/remove-bg/ 에 접속합니다.
-5. 로그인하지 않은 브라우저에서 예시 및 직접 선택한 이미지의 배경 제거·PNG 다운로드를 확인합니다. 첫 실행에는 모델 다운로드 시간이 필요합니다.
-
-이 절차를 적용하기 전에는 목표 주소가 동작한다고 보장할 수 없습니다. 이 문서 작성 시 목표 주소로 배포하지 않았으며, 기존 GitHub Pages 설정도 변경하지 않았습니다.
-
-### 새 도구를 추가하거나 기존 도구를 갱신할 때
-
-1. 도구별 고유 경로를 정합니다. 예를 들어 비밀번호 생성 도구는 `/generator-password/`입니다.
-2. 해당 도구를 그 경로 기준으로 빌드합니다. Vite라면 `--base=/generator-password/`를 사용합니다. JavaScript에서 직접 불러오는 파일도 이 기본 경로를 따라야 합니다.
-3. 결과물을 조직 사이트 저장소의 `generator-password/`에 넣고 루트 `index.html`의 도구 목록에 링크를 추가합니다.
-4. 조직 사이트를 게시하면 기존 `/remove-bg/`와 새 도구를 함께 사용할 수 있습니다.
-
-도구 하나를 갱신할 때는 **그 도구 폴더만 교체**하고 다른 도구와 루트 시작 화면을 보존합니다. 현재 수동 빌드가 만드는 `remove-bg-pages`는 배경 제거 도구만 들어 있는 부분 결과물입니다. 기존 조직 사이트 파일에 합쳐야 하며, 이를 조직 사이트 전체로 간주해 덮어쓰면 다른 도구가 사라집니다.
-
-나중에 GitHub Actions로 게시를 자동화할 때도 **모든 도구와 시작 화면을 모은 최종 결과물 하나**를 `deploy-pages`에 전달해야 합니다. 도구별 작업이 서로 다른 부분 결과물을 같은 조직 사이트에 각각 배포하도록 구성하지 않습니다. 현재 워크플로는 수동 파일 생성만 수행합니다.
+각 도구의 부분 결과물을 따로 `deploy-pages`에 올리면 이전 도구가 사라질 수 있으므로 **도구 목록과 모든 도구를 포함한 `dist/` 하나를 게시**합니다. `site/remove-bg/`는 빌드 출력과 충돌하므로 사용하지 않습니다. 도구별 데이터 캐시 이름도 서로 구분하세요.
 
 ### 운영 참고
 
-모델 캐시는 같은 브라우저에서 재사용합니다. 정적 자산 트래픽은 발생하지만 추론 서버나 유료 이미지 처리 API는 없습니다. GitHub Pages의 용량·트래픽 제한을 확인하고 운영하세요. 완전한 오프라인 PWA는 아닙니다.
+호스팅은 정적 파일 전송만 담당하며 사용자 이미지와 결과는 브라우저에서 처리합니다. 추론 서버나 유료 이미지 처리 API는 없습니다. GitHub Pages의 사이트 용량·트래픽 제한은 모든 도구가 함께 사용합니다. 모델 Cache Storage는 재사용하지만 완전한 오프라인 PWA는 아닙니다.
 
-`.openai/hosting.json`은 이전 Sites 식별 정보이며 GitHub 배포에는 사용하지 않습니다. 이후 Sites에 다시 배포하지 않습니다. GitHub의 `production` 브랜치 Pages와 수동 파일 생성 워크플로는 별개입니다. 기존 GitHub 사이트까지 중단하려면 저장소 관리자가 Settings → Pages에서 **Unpublish site**를 실행해야 합니다.
+`.openai/hosting.json`은 이전 Sites 식별 정보이며 GitHub 배포에는 사용하지 않습니다. 이전 `InternalToolGui` 저장소의 Pages 설정도 이 저장소와 별개입니다.
 
-공식 문서: [Pages 사이트 유형과 주소](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [게시 브랜치 설정](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+공식 문서: [Pages 사이트 유형과 주소](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [Actions로 Pages 배포](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
 ## 검증
 

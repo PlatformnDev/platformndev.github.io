@@ -1,1 +1,22 @@
-{"name":"clearcut","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"tsc --noEmit && vite build","preview":"vite preview --host 127.0.0.1","test":"node --experimental-strip-types --test tests/*.test.mjs","prepare:model":"node scripts/prepare-model.mjs"},"dependencies":{"onnxruntime-web":"1.22.0"},"devDependencies":{"typescript":"~5.8.3","vite":"^6.3.5"}}
+{
+  "name": "clearcut",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "prepare:model": "node scripts/prepare-model.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "preview:site": "vite preview --host 127.0.0.1 --base=/"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.22.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
