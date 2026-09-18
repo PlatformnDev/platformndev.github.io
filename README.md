@@ -13,7 +13,7 @@
 
 ## 정적 웹 배포 방법
 
-GitHub Pages와 GitHub Actions를 사용합니다. 저장소의 `main` 브랜치에 변경사항이 반영되거나 Actions에서 수동 실행하면 [`.github/workflows/pages.yml`](.github/workflows/pages.yml)이 다음 순서로 전체 정적 사이트를 배포합니다.
+GitHub Pages와 GitHub Actions를 사용합니다. 저장소의 `main` 브랜치에 변경사항이 반영되거나 Actions에서 수동 실행하면 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)이 다음 순서로 전체 정적 사이트를 배포합니다.
 
 1. 의존성을 설치합니다.
 2. 테스트를 실행합니다.

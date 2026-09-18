@@ -1,4 +1,4 @@
-name: Deploy organization tools
+name: Deploy to public
 # Build on each update; deploy only from the correctly named organization site.
 on:
   push:
