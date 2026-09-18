@@ -2,24 +2,31 @@
 
 브라우저에서 이미지 배경을 제거하는 정적 사이트입니다. 이미지를 서버에 보내지 않습니다. Vite + TypeScript + ONNX Runtime Web으로 구성했으며 로그인, API 서버, 데이터베이스가 없습니다.
 
-## 실행과 빌드
+## 로컬에서 실행하기
 
-Node.js 22.23 이상을 사용합니다.
+Node.js 22.23 이상과 Git을 설치합니다. Node 설치에 포함된 npm을 사용합니다.
 
 ```sh
+git clone https://github.com/PlatformnDev/InternalToolGui.git
+cd InternalToolGui
 npm ci
 npm run dev
 ```
 
-모델 조각과 실행 파일은 `public/`에 포함되어 있어 체크아웃 후 별도 다운로드 없이 실행할 수 있습니다. `.cache`의 원본 모델은 버전 관리에서 제외합니다.
+터미널에 표시되는 주소(기본 `http://127.0.0.1:5173/`)를 브라우저에서 엽니다. 이미지를 선택하거나 오타니 예시 버튼을 누르면 자동으로 배경을 제거합니다. 완료 후 **투명 PNG 다운로드**로 저장합니다. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다.
+
+이미 이 작업 폴더에 있다면 `git clone`과 `cd`를 생략하고 `npm ci`부터 실행합니다. 포트가 사용 중이면 터미널에 표시된 다른 포트를 사용하세요. Chrome·Edge 계열 데스크톱 브라우저를 권장하며 실제 검증 범위는 아래 검증 기록을 참고하세요.
+
+모델 조각과 실행 파일은 `public/`에 포함되어 있어 정상 체크아웃 후 별도 모델 다운로드 없이 실행할 수 있습니다. 브라우저가 처음 실행할 때 로컬 서버에서 모델 약 176MB와 실행 자산 약 22MB를 읽습니다. 이미지 처리는 브라우저 안에서 수행합니다. 파일이 누락되었다면 `npm run prepare:model`로 복구할 수 있으며, 이 준비 명령은 인터넷에 접속합니다.
+
+배포용 빌드를 로컬에서 확인하려면:
 
 ```sh
 npm run build
 npm run preview
-npm test
 ```
 
-`dist/`가 배포 가능한 완전 정적 결과물입니다. 실행에는 HTTPS 또는 localhost가 필요합니다. 사이트를 파일로 직접 열면 Worker·WebGPU·모델 로딩이 동작하지 않습니다.
+기본 주소는 `http://127.0.0.1:4173/`이며 종료는 `Ctrl+C`입니다. 테스트는 `npm test`로 실행합니다. `dist/`가 완전 정적 결과물입니다. `index.html`을 파일 탐색기에서 직접 열면 Worker·모델 로딩이 동작하지 않으므로 반드시 로컬 서버 또는 HTTPS 호스팅을 사용하세요.
 
 ## 입력과 출력
 
@@ -57,20 +64,84 @@ npm run prepare:model
 
 모델과 런타임은 동일 사이트에서 제공합니다. GitHub Pages에서는 `_headers` 파일이 적용되지 않으므로 빌드 HTML의 CSP 및 referrer 메타 태그를 사용합니다. 헤더로만 가능한 frame-ancestors와 nosniff, 사용자 지정 HTTP 캐시 정책은 Pages에서 설정하지 못합니다. 모델의 Cache Storage 재사용은 계속 동작합니다. 캐시가 차단되거나 저장 공간이 부족해도 해당 세션에서 처리가 가능합니다.
 
-## GitHub Pages 배포
+## GitHub Pages 호스팅 방법
 
-`.github/workflows/pages.yml`이 `main` 푸시 시 테스트 → 정적 빌드 → GitHub Pages 배포를 수행합니다. 저장소 Settings → Pages의 Source를 GitHub Actions로 지정합니다. 인증 토큰은 소스에 넣지 않으며 Actions의 일회성 기본 토큰을 사용합니다.
+### 현재 상태와 필요한 주소
 
-배포 경로는 Pages 설정에서 가져옵니다. 로컬에서 프로젝트 경로를 검증하려면 다음과 같이 실행합니다.
+- 소스 저장소: https://github.com/PlatformnDev/InternalToolGui
+- 목표 주소: https://platformndev.github.io/remove_bg/ (`/remove_bg`로 접속하면 디렉터리 주소로 이동)
+- 기존 ChatGPT Sites는 공개 접근을 차단해 소유자만 접근할 수 있습니다. 배포 기록과 프로젝트 자체는 삭제하지 않았습니다.
+- 자동 배포는 중단했습니다. `.github/workflows/pages.yml`은 수동 실행 시 정적 파일 묶음만 생성하며 사이트를 게시하지 않습니다.
+
+**저장소 이름과 기본 Pages 주소는 연결됩니다.** `InternalToolGui` 저장소에 직접 Pages를 켜면 `https://platformndev.github.io/InternalToolGui/`가 됩니다. Vite의 `base`만 `/remove_bg/`로 바꿔도 Pages 주소가 바뀌지는 않습니다.
+
+소스 저장소 이름을 유지하면서 목표 주소를 사용하려면 **조직 사이트용 `PlatformnDev/PlatformnDev.github.io` 저장소**에 정적 파일을 게시해야 합니다. 해당 저장소의 사이트 루트에 `remove_bg/` 폴더를 두는 방식입니다. 다른 방법은 프로젝트 저장소 이름을 `remove_bg`로 변경하는 것이지만, 이는 지정한 소스 저장소 주소가 바뀌므로 여기서는 사용하지 않습니다.
+
+확인 시점에 `InternalToolGui`의 Pages는 `production` 브랜치의 루트를 게시하도록 설정되어 있었습니다. 현재 계정에는 이 저장소의 쓰기 권한은 있으나 관리자 권한은 없으며, 조직 사이트 저장소는 조회되지 않았습니다(미생성 또는 접근 권한 없음). 조직 관리자에게 조직 사이트 저장소 생성·접근 권한과 아래 Pages 설정을 요청하세요.
+
+### 1. 게시할 정적 파일 만들기
+
+로컬 소스 저장소에서 실행합니다(macOS/Linux 셸 기준).
 
 ```sh
-SITE_BASE_PATH=/remove-bg/ npm run build
-SITE_BASE_PATH=/remove-bg/ npm run preview
+npm ci
+npm test
+npm run build -- --base=/remove_bg/
 ```
 
-사진·모델·WASM·Worker·라이선스 링크는 모두 해당 경로를 따릅니다. 모델과 실행 자산 약 199MB는 정적 결과물에 포함됩니다. `.openai/hosting.json`은 이전 Sites 식별 정보이며 GitHub 배포에는 사용하지 않습니다. 이후 Sites에 다시 배포하지 않습니다.
+이 명령은 모델·WASM·이미지·Worker를 포함한 `dist/`를 생성합니다. 파일 크기는 약 199MB입니다. 런타임에는 외부 모델 CDN을 사용하지 않습니다.
 
-호스팅에는 정적 자산 트래픽이 발생합니다. 추론 서버 비용이나 유료 이미지 처리 API 호출은 없습니다. 완전한 오프라인 PWA를 제공하는 것은 아닙니다.
+로컬에서 같은 주소 구조로 검사하려면:
+
+```sh
+npm run preview -- --base=/remove_bg/
+```
+
+`http://127.0.0.1:4173/remove_bg/`에서 파일 선택 → 배경 제거 → PNG 다운로드를 확인하고 `Ctrl+C`로 종료합니다.
+
+로컬 빌드 대신 GitHub에서 **InternalToolGui → Actions → Prepare GitHub Pages files → Run workflow**를 실행해도 됩니다. 성공한 실행에서 `remove-bg-pages` 아티팩트를 내려받아 압축을 풀면 `.nojekyll`과 `remove_bg/` 폴더가 있습니다. 이 단계는 파일만 만들며 공개 배포는 하지 않습니다.
+
+### 2. 조직 사이트 저장소에 결과 넣기
+
+조직 관리자에게 `PlatformnDev/PlatformnDev.github.io` 저장소를 준비하도록 요청합니다. 이미 조직 사이트가 있다면 그 저장소의 기존 배포 방식과 파일을 보존해야 합니다. 아래 예시는 새 저장소이거나 `main` 브랜치 루트를 정적으로 게시하는 조직 사이트 기준입니다. 기존 사이트가 GitHub Actions로 게시된다면 그 사이트의 빌드 결과에 `remove_bg/`를 병합해야 하며, 기존 Pages 설정을 덮어쓰면 안 됩니다.
+
+로컬 소스 폴더 `InternalToolGui`와 조직 사이트 폴더가 같은 상위 폴더에 있도록 체크아웃합니다.
+
+```sh
+# InternalToolGui 폴더에서 실행
+cd ..
+git clone https://github.com/PlatformnDev/PlatformnDev.github.io.git
+cd PlatformnDev.github.io
+# 이미 체크아웃한 저장소라면 clone 대신 해당 폴더에서 기존 변경 사항을 확인한 뒤 git pull
+mkdir -p remove_bg
+cp -R ../InternalToolGui/dist/. remove_bg/
+touch .nojekyll
+git add remove_bg .nojekyll
+git commit -m "Deploy background removal tool"
+git push origin main
+```
+
+새 빈 저장소이고 현재 브랜치가 `main`이 아니면 최초 푸시 전에 `git branch -M main`을 실행합니다. 아티팩트를 받은 경우 `cp` 대신 압축 해제한 `remove_bg/`와 `.nojekyll`을 사이트 저장소 루트로 복사합니다. **조직 사이트 루트의 다른 파일은 삭제하지 않습니다.** 이후 재배포 시 불필요한 이전 빌드 파일은 이 도구 전용 `remove_bg/` 안에서만 정리합니다. 원본 소스나 `node_modules`는 게시하지 않습니다.
+
+### 3. 조직 사이트의 Pages 켜기
+
+조직 사이트 저장소의 관리자가 다음을 설정합니다.
+
+1. **PlatformnDev.github.io → Settings → Pages**로 이동합니다.
+2. **Build and deployment → Source: Deploy from a branch**를 선택합니다.
+3. **Branch: main**, 폴더 **/(root)**를 선택하고 저장합니다.
+4. Pages 배포 작업이 성공하면 https://platformndev.github.io/remove_bg/ 에 접속합니다.
+5. 로그인하지 않은 브라우저에서 예시 및 직접 선택한 이미지의 배경 제거·PNG 다운로드를 확인합니다. 첫 실행에는 모델 다운로드 시간이 필요합니다.
+
+이 절차를 적용하기 전에는 목표 주소가 동작한다고 보장할 수 없습니다. 이 문서 작성 시 목표 주소로 배포하지 않았으며, 기존 GitHub Pages 설정도 변경하지 않았습니다.
+
+### 운영 참고
+
+모델 캐시는 같은 브라우저에서 재사용합니다. 정적 자산 트래픽은 발생하지만 추론 서버나 유료 이미지 처리 API는 없습니다. GitHub Pages의 용량·트래픽 제한을 확인하고 운영하세요. 완전한 오프라인 PWA는 아닙니다.
+
+`.openai/hosting.json`은 이전 Sites 식별 정보이며 GitHub 배포에는 사용하지 않습니다. 이후 Sites에 다시 배포하지 않습니다. GitHub의 `production` 브랜치 Pages와 수동 파일 생성 워크플로는 별개입니다. 기존 GitHub 사이트까지 중단하려면 저장소 관리자가 Settings → Pages에서 **Unpublish site**를 실행해야 합니다.
+
+공식 문서: [Pages 사이트 유형과 주소](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [게시 브랜치 설정](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
 ## 검증
 
