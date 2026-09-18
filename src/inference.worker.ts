@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import type * as ORT from 'onnxruntime-web';
-const runtimePath='/ort/ort.webgpu.min.mjs';
+const runtimeDirectory=new URL(import.meta.env.BASE_URL+'ort/',self.location.origin).href;
+const runtimePath=runtimeDirectory+'ort.webgpu.min.mjs';
 let ort:typeof ORT;
 import {loadModel} from './model';
 import {normalizeMask} from './core';
@@ -11,7 +12,7 @@ const send=(id:number,event:Record<string,unknown>)=>scope.postMessage({id,...ev
 async function init(id:number,forceWasm:boolean){
  if(session)return;
  ort??=await import(/* @vite-ignore */ runtimePath);
- ort.env.wasm.numThreads=1;ort.env.wasm.proxy=false;ort.env.wasm.wasmPaths='/ort/';
+ ort.env.wasm.numThreads=1;ort.env.wasm.proxy=false;ort.env.wasm.wasmPaths=runtimeDirectory;
  modelBytes=await loadModel((done,total)=>send(id,{type:'progress',done,total}));
  if(!forceWasm&&'gpu' in navigator){try{session=await ort.InferenceSession.create(modelBytes,{executionProviders:['webgpu'],graphOptimizationLevel:'all'});backend='webgpu';}catch{session=undefined;}}
  if(!session){session=await ort.InferenceSession.create(modelBytes,{executionProviders:['wasm'],graphOptimizationLevel:'all'});backend='wasm';modelBytes=undefined;}

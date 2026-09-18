@@ -55,9 +55,20 @@ npm run prepare:model
 
 원본·미리보기·결과는 메모리에만 유지합니다. 파일명은 화면에만 표시합니다. Cache Storage에는 모델 조각만 저장하며 사용자 이미지는 저장하지 않습니다. 페이지를 닫으면 현재 작업은 사라집니다. 분석·오류 전송 SDK나 외부 폰트가 없습니다.
 
-모델과 런타임은 동일 사이트에서 제공합니다. `public/_headers`에는 CSP, nosniff, Referrer-Policy와 모델 캐시 정책이 있습니다. 다른 호스팅으로 옮길 때도 같은 헤더를 적용하세요. 캐시가 차단되거나 저장 공간이 부족해도 해당 세션에서 처리가 가능합니다.
+모델과 런타임은 동일 사이트에서 제공합니다. GitHub Pages에서는 `_headers` 파일이 적용되지 않으므로 빌드 HTML의 CSP 및 referrer 메타 태그를 사용합니다. 헤더로만 가능한 frame-ancestors와 nosniff, 사용자 지정 HTTP 캐시 정책은 Pages에서 설정하지 못합니다. 모델의 Cache Storage 재사용은 계속 동작합니다. 캐시가 차단되거나 저장 공간이 부족해도 해당 세션에서 처리가 가능합니다.
 
-Sites의 `.openai/hosting.json`은 `dist`를 정적 루트로 지정합니다. 배포는 Sites 스킬에 따라 **소스 커밋·푸시 → 빌드 결과 패키징 → 버전 저장 → 공개 배포** 순서로 진행합니다. 사이트 공개 설정은 링크를 가진 누구나 로그인 없이 접속하도록 지정되어 있습니다. 인증 정보는 소스나 설정 파일에 저장하지 않습니다.
+## GitHub Pages 배포
+
+`.github/workflows/pages.yml`이 `main` 푸시 시 테스트 → 정적 빌드 → GitHub Pages 배포를 수행합니다. 저장소 Settings → Pages의 Source를 GitHub Actions로 지정합니다. 인증 토큰은 소스에 넣지 않으며 Actions의 일회성 기본 토큰을 사용합니다.
+
+배포 경로는 Pages 설정에서 가져옵니다. 로컬에서 프로젝트 경로를 검증하려면 다음과 같이 실행합니다.
+
+```sh
+SITE_BASE_PATH=/remove-bg/ npm run build
+SITE_BASE_PATH=/remove-bg/ npm run preview
+```
+
+사진·모델·WASM·Worker·라이선스 링크는 모두 해당 경로를 따릅니다. 모델과 실행 자산 약 199MB는 정적 결과물에 포함됩니다. `.openai/hosting.json`은 이전 Sites 식별 정보이며 GitHub 배포에는 사용하지 않습니다. 이후 Sites에 다시 배포하지 않습니다.
 
 호스팅에는 정적 자산 트래픽이 발생합니다. 추론 서버 비용이나 유료 이미지 처리 API 호출은 없습니다. 완전한 오프라인 PWA를 제공하는 것은 아닙니다.
 

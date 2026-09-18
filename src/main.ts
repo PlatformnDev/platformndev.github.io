@@ -40,7 +40,7 @@ const sampleButton=$<HTMLButtonElement>('sample-button');
 sampleButton.addEventListener('click',async()=>{
  const token=generation;sampleButton.disabled=true;$('sample-status').textContent='예시 사진을 불러오는 중…';
  try{
-  const response=await fetch('/examples/shohei-ohtani.jpg');if(!response.ok)throw Error('sample');
+  const response=await fetch(import.meta.env.BASE_URL+'examples/shohei-ohtani.jpg');if(!response.ok)throw Error('sample');
   const blob=await response.blob();if(token!==generation)return;
   void start(new File([blob],'shohei-ohtani.jpg',{type:'image/jpeg'}));
  }catch{if(token===generation)$('sample-status').textContent='예시 사진을 불러오지 못했어요. 다시 눌러 주세요.';}

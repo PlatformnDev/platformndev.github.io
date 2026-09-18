@@ -2,8 +2,9 @@ import {defineConfig} from 'vite';
 import {createReadStream,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 export default defineConfig({
+ base:process.env.SITE_BASE_PATH||'/',
  build:{target:'es2022'},worker:{format:'es'},
- plugins:[{name:'serve-onnx-native-modules',configureServer(server){
+ plugins:[{name:'static-csp',apply:'build',transformIndexHtml(){return[{tag:'meta',attrs:{'http-equiv':'Content-Security-Policy',content:"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"},injectTo:'head-prepend'}];}},{name:'serve-onnx-native-modules',configureServer(server){
   // ORT imports its own ESM loader dynamically. Serve these vendored modules
   // unchanged in development, matching the production static host.
   server.middlewares.use((req,res,next)=>{
